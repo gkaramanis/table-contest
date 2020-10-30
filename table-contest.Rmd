@@ -1,5 +1,5 @@
 ---
-title: "2020 RStudio<br>Table Contest"
+title: "2020 RStudio Table Contest"
 output: 
   html_document:
     css: "resources/css/main.css"
@@ -21,9 +21,9 @@ posters <- json$users %>%
   rename(user_id = id) %>%
   write_csv(here::here("data", "posters.csv"))
 
-posts <- json$topic_list[9] %>%
-  as.data.frame() %>%
-  clean_names()  %>%
+posts <- json$topic_list["topics"] %>%
+  as.data.frame() %>% 
+  clean_names()  %>% 
   filter(str_detect(topics_title, "Submission")) %>%
   unnest(cols = topics_posters) %>%
   filter(str_detect(description, "Original Poster")) %>%
@@ -31,10 +31,11 @@ posts <- json$topic_list[9] %>%
   mutate(
     topics_title = str_remove(topics_title, " - Table Contest Submission"),
     avatar_template = paste0("https://community.rstudio.com", str_replace(avatar_template, "\\{size\\}", "32")),
+    date = str_sub(topics_created_at, 1, 10)
     # topics_like_count = paste0("♡ ", topics_like_count),
     # name_username = str_remove(paste0(name, "<br>", username), "NA<br>")
   ) %>%
-  select(avatar_template, name, username, topics_title, topics_slug, topics_image_url, topics_views, topics_like_count) %>%
+  select(avatar_template, name, username, topics_title, topics_slug, topics_image_url, topics_views, topics_like_count, date) %>%
   write_csv(here::here("data", "posts.csv"))
 
 posters <- read_csv(here::here("data", "posters.csv"))
@@ -63,6 +64,7 @@ tbl <- posts %>%
     ),
     name = colDef(
       name = "",
+      minWidth = 120,
       sortable = FALSE,
       html = TRUE,
       cell = function(value, index) {
@@ -117,6 +119,12 @@ tbl <- posts %>%
         tagList(div(style = list(display = "inline-block", height = "100px"), image))
       }
     }
+    ),
+    date = colDef(
+      name = "",
+      style = function(value) {
+        list(color = "silver")
+      }
     )
   )
 )
@@ -130,6 +138,6 @@ htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=IBM+Plex+Sa
 
 div(
   tbl,
-  paste0("Last updated ", Sys.Date())
+  paste0("Source: community.rstudio.com | Table: Georgios Karamanis | Last updated ", Sys.Date())
 )
 ```

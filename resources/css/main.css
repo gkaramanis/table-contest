@@ -2,11 +2,6 @@ body {
   font-family: Poppins;
 }
 
-#title {
-    font-family: IBM-Plex-Sans;
-    font-style: oblique;
-}
-
 .image-cropper {
   position: relative;
   overflow: hidden;
@@ -16,5 +11,6 @@ body {
 .title {
   margin: 18px 0;
   font-size: 16px;
+  font-weight: bold;
   color: #80AAD7;
 }
