@@ -32,8 +32,6 @@ posts <- json$topic_list["topics"] %>%
     topics_title = str_remove(topics_title, " - Table Contest Submission"),
     avatar_template = paste0("https://community.rstudio.com", str_replace(avatar_template, "\\{size\\}", "32")),
     date = str_sub(topics_created_at, 1, 10)
-    # topics_like_count = paste0("♡ ", topics_like_count),
-    # name_username = str_remove(paste0(name, "<br>", username), "NA<br>")
   ) %>%
   select(avatar_template, name, username, topics_title, topics_slug, topics_image_url, topics_views, topics_like_count, date) %>%
   write_csv(here::here("data", "posts.csv"))
@@ -50,6 +48,12 @@ tbl <- posts %>%
   pagination = FALSE,
     style = list(fontFamily = "Atkinson Hyperlegible, sans-serif", fontSize = "14px"),
   showSortable = TRUE,
+   theme = reactableTheme(
+    headerStyle = list(
+      borderColor = "#80AAD7",
+      borderWidth = "3px"
+    )
+   ),
   columns = list(
     avatar_template = colDef(
       name = "",
@@ -64,7 +68,7 @@ tbl <- posts %>%
     ),
     name = colDef(
       name = "",
-      minWidth = 120,
+      minWidth = 140,
       sortable = FALSE,
       html = TRUE,
       cell = function(value, index) {
@@ -122,6 +126,7 @@ tbl <- posts %>%
     ),
     date = colDef(
       name = "",
+      align = "right",
       style = function(value) {
         list(color = "silver")
       }
