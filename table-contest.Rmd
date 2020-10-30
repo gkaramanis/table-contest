@@ -1,0 +1,135 @@
+---
+title: "2020 RStudio<br>Table Contest"
+output: 
+  html_document:
+    css: "resources/css/main.css"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(jsonlite)
+library(janitor)
+library(reactable)
+library(htmltools)
+
+json <- fromJSON("https://community.rstudio.com/tags/table-contest.json")
+
+posters <- json$users %>%
+  as.data.frame() %>%
+  rename(user_id = id) %>%
+  write_csv(here::here("data", "posters.csv"))
+
+posts <- json$topic_list[9] %>%
+  as.data.frame() %>%
+  clean_names()  %>%
+  filter(str_detect(topics_title, "Submission")) %>%
+  unnest(cols = topics_posters) %>%
+  filter(str_detect(description, "Original Poster")) %>%
+  left_join(posters) %>%
+  mutate(
+    topics_title = str_remove(topics_title, " - Table Contest Submission"),
+    avatar_template = paste0("https://community.rstudio.com", str_replace(avatar_template, "\\{size\\}", "32")),
+    # topics_like_count = paste0("♡ ", topics_like_count),
+    # name_username = str_remove(paste0(name, "<br>", username), "NA<br>")
+  ) %>%
+  select(avatar_template, name, username, topics_title, topics_slug, topics_image_url, topics_views, topics_like_count) %>%
+  write_csv(here::here("data", "posts.csv"))
+
+posters <- read_csv(here::here("data", "posters.csv"))
+posts <- read_csv(here::here("data", "posts.csv"))
+
+```
+
+```{r echo=FALSE}
+tbl <- posts %>% 
+  select(-topics_slug) %>% 
+  reactable(
+  pagination = FALSE,
+    style = list(fontFamily = "Atkinson Hyperlegible, sans-serif", fontSize = "14px"),
+  showSortable = TRUE,
+  columns = list(
+    avatar_template = colDef(
+      name = "",
+      sortable = FALSE,
+      width = 50,
+      cell = function(value) {
+        image <- img(src = value, alt = "", class = "image-cropper")
+        tagList(
+          div(style = list(display = "inline-block", width = "32px"), image)
+          )
+      }
+    ),
+    name = colDef(
+      name = "",
+      sortable = FALSE,
+      html = TRUE,
+      cell = function(value, index) {
+        ifelse(!is.na(value),
+          paste0("<b>", value, "</b><br>", "<a style='color:grey;'>", posts$username[index], "</a>"),
+          paste0("<a style='color:grey;'>", posts$username[index], "</a>")
+        )
+      }),
+    username = colDef(
+      name = "",
+      sortable = FALSE,
+      html = TRUE,
+      width = 0,
+      cell = function(value) {
+        tagList(div(style = list(display = "none")))
+      })
+    ,
+    topics_title = 
+      colDef(
+        sortable = FALSE,
+        cell = function(value, index) {
+          link <- a(
+            href = paste0("https://community.rstudio.com/t/", posts$topics_slug[index]),
+            value
+          )
+        },
+        name = "",
+        minWidth = 200
+      ),
+    topics_views = colDef(
+      name = "",
+      html = TRUE,
+      width = 80,
+      cell = function(value) {
+        paste0(value, " ", "<i class='fa fa-eye'></i>")
+      }
+    ),
+    topics_like_count = colDef(
+      name = "",
+      width = 80,
+      html = TRUE,
+      cell = function(value) {
+        paste0(value, " ", "<i class='fa fa-heart' style='color:red;'></i>")
+      }
+    ),
+    topics_image_url = colDef(
+      name = "",
+      sortable = FALSE,
+      cell = function(value, index) {
+      if (!is.na(value)) {
+        image <- a(href = value, img(src = value, alt = ""))
+        tagList(div(style = list(display = "inline-block", height = "100px"), image))
+      }
+    }
+    )
+  )
+)
+
+
+htmltools::tags$link(href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", rel = "stylesheet")
+
+htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=Poppins", rel = "stylesheet")
+
+htmltools::tags$link(href = "https://fonts.googleapis.com/css?family=IBM+Plex+Sans", rel = "stylesheet")
+
+div(
+  tbl,
+  paste0("Last updated ", Sys.Date())
+)
+```

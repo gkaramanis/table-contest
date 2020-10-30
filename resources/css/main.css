@@ -1,0 +1,20 @@
+body {
+  font-family: Poppins;
+}
+
+#title {
+    font-family: IBM-Plex-Sans;
+    font-style: oblique;
+}
+
+.image-cropper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.title {
+  margin: 18px 0;
+  font-size: 16px;
+  color: #80AAD7;
+}
