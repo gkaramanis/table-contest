@@ -1,9 +1,9 @@
 user_id,username,name,avatar_template
+66500,gkaramanis,Georgios Karamanis,/user_avatar/community.rstudio.com/gkaramanis/{size}/25319_2.png
 2130,R-by-Ryo,Ryo Nakagawara,/user_avatar/community.rstudio.com/r-by-ryo/{size}/9686_2.png
 3233,IACCancu,Juan Cruz Rodriguez,/user_avatar/community.rstudio.com/iaccancu/{size}/2771_2.png
 3112,Z3tt,Cedric Scherer,/user_avatar/community.rstudio.com/z3tt/{size}/22857_2.png
 75861,kcuilla,Kyle Cuilla,/letter_avatar_proxy/v4/letter/k/c57346/{size}.png
-66500,gkaramanis,Georgios Karamanis,/user_avatar/community.rstudio.com/gkaramanis/{size}/25319_2.png
 77819,51dafu,GZ,/letter_avatar_proxy/v4/letter/5/a9adbd/{size}.png
 27244,bstaton1,,/user_avatar/community.rstudio.com/bstaton1/{size}/6569_2.png
 77686,awconway,Aaron Conway,/user_avatar/community.rstudio.com/awconway/{size}/26728_2.png
@@ -26,4 +26,3 @@ user_id,username,name,avatar_template
 72645,ekholme,Eric Ekholm,/letter_avatar_proxy/v4/letter/e/ee59a6/{size}.png
 67567,malcmalc,,/letter_avatar_proxy/v4/letter/m/3e96dc/{size}.png
 77665,rmwoody,Robert m Woody,/letter_avatar_proxy/v4/letter/r/65b543/{size}.png
-67562,byron,Byron Jaeger,/letter_avatar_proxy/v4/letter/b/48db29/{size}.png
