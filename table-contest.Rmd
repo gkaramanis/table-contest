@@ -14,7 +14,7 @@ library(janitor)
 library(reactable)
 library(htmltools)
 
-json <- fromJSON("https://community.rstudio.com/tags/table-contest.json")
+json <- fromJSON("https://community.rstudio.com/tag/table-contest.json")
 
 posters <- json$users %>%
   as.data.frame() %>%
