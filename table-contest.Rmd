@@ -14,6 +14,7 @@ library(janitor)
 library(reactable)
 library(htmltools)
 
+# Gets only first page of posts, TODO rbind_pages
 json <- fromJSON("https://community.rstudio.com/tag/table-contest.json")
 
 posters <- json$users %>%
